@@ -13,10 +13,10 @@ export class CrearTareaComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private tareaService: TareaService) {
     this.tareaForm = this.fb.group({
-      id: [0], // Para manejar el ID de la tarea
+      id: [0],
       nombre: ['', [Validators.required, Validators.minLength(5)]],
       fechaLimite: ['', Validators.required],
-      personas: this.fb.array([], this.validarNombresDuplicados()), // Validación de duplicados a nivel del FormArray
+      personas: this.fb.array([], this.validarNombresDuplicados()),
     });
   }
 
@@ -73,14 +73,14 @@ export class CrearTareaComponent implements OnInit {
   // Validación personalizada para evitar nombres duplicados
   validarNombresDuplicados() {
     return (formArray: FormArray) => {
-      const nombres = formArray.controls.map(control => control.get('nombre')?.value?.toLowerCase()); // Convertir a minúsculas para comparación
+      const nombres = formArray.controls.map(control => control.get('nombre')?.value?.toLowerCase());
       const nombresUnicos = new Set(nombres);
 
       if (nombresUnicos.size !== nombres.length) {
-        return { nombresDuplicados: true }; // Retorna un error si hay duplicados
+        return { nombresDuplicados: true };
       }
 
-      return null; // Retorna null si no hay errores
+      return null;
     };
   }
 
