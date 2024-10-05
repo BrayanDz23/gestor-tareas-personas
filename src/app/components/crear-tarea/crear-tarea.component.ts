@@ -33,12 +33,10 @@ export class CrearTareaComponent implements OnInit {
     });
   }
 
-  // Obtener el FormArray de personas
   get personas(): FormArray {
     return this.tareaForm.get('personas') as FormArray;
   }
 
-  // Crear un FormGroup para cada persona
   crearPersonaFormGroup(persona?: { nombre: string; edad: number; habilidades: string[] }): FormGroup {
     return this.fb.group({
       nombre: [persona ? persona.nombre : '', [Validators.required, Validators.minLength(5)]],
@@ -47,30 +45,25 @@ export class CrearTareaComponent implements OnInit {
     });
   }
 
-  // Agregar una persona al FormArray
   agregarPersona(): void {
     this.personas.push(this.crearPersonaFormGroup());
-    this.personas.updateValueAndValidity(); // Actualizar validación al agregar persona
+    this.personas.updateValueAndValidity();
   }
 
-  // Eliminar una persona del FormArray
   eliminarPersona(index: number): void {
     this.personas.removeAt(index);
-    this.personas.updateValueAndValidity(); // Actualizar validación al eliminar persona
+    this.personas.updateValueAndValidity();
   }
 
-  // Agregar una habilidad al FormArray de habilidades de una persona
   agregarHabilidad(index: number): void {
     const habilidades = this.personas.at(index).get('habilidades') as FormArray;
     habilidades.push(this.fb.control('', Validators.required));
   }
 
-  // Eliminar una habilidad del FormArray de habilidades de una persona
   eliminarHabilidad(personaIndex: number, habilidadIndex: number): void {
     (this.personas.at(personaIndex).get('habilidades') as FormArray).removeAt(habilidadIndex);
   }
 
-  // Validación personalizada para evitar nombres duplicados
   validarNombresDuplicados() {
     return (formArray: FormArray) => {
       const nombres = formArray.controls.map(control => control.get('nombre')?.value?.toLowerCase());
@@ -84,12 +77,10 @@ export class CrearTareaComponent implements OnInit {
     };
   }
 
-  // Guardar la tarea, validando todos los campos
   guardarTarea(): void {
     if (this.tareaForm.invalid) {
-      // Marcar todos los campos como tocados para mostrar las validaciones
       this.marcarTodosComoTocados(this.tareaForm);
-      return; // No continuar si el formulario es inválido
+      return;
     }
 
     const tarea: Tarea = {
@@ -101,15 +92,14 @@ export class CrearTareaComponent implements OnInit {
     };
 
     if (tarea.id) {
-      this.tareaService.updateTarea(tarea); // Actualizar tarea existente
+      this.tareaService.updateTarea(tarea);
     } else {
-      this.tareaService.addTarea(tarea); // Agregar nueva tarea
+      this.tareaService.addTarea(tarea);
     }
 
     this.tareaForm.reset();
   }
 
-  // Marcar todos los campos y subcampos como tocados
   marcarTodosComoTocados(formGroup: FormGroup | FormArray): void {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);

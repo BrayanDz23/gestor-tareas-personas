@@ -8,16 +8,15 @@ import { BehaviorSubject } from 'rxjs';
 export class TareaService {
   private tareas: Tarea[] = [];
   tareaParaEditar: BehaviorSubject<Tarea | null> = new BehaviorSubject(null);
-  private idCounter = 1; // Para generar IDs únicos
+  private idCounter = 1;
 
   getTareas(): Tarea[] {
     return this.tareas;
   }
 
   addTarea(tarea: Tarea): void {
-    tarea.id = this.idCounter++; // Asignamos un ID único
+    tarea.id = this.idCounter++;
     this.tareas.push(tarea);
-    console.log('Tarea añadida:', tarea); // Agrega esto para depuración
   }
 
   updateTarea(tareaActualizada: Tarea): void {
@@ -30,7 +29,7 @@ export class TareaService {
   marcarComoCompletada(id: number): void {
     const tarea = this.tareas.find(t => t.id === id);
     if (tarea) {
-      tarea.completada = !tarea.completada; // Cambiamos el estado de completada
+      tarea.completada = !tarea.completada;
     }
   }
 

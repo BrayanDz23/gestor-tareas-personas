@@ -9,7 +9,7 @@ import { Tarea } from '../../models/tarea.model';
 })
 export class ListadoTareasComponent {
   tareas: Tarea[] = [];
-  filtroSeleccionado: string = 'todas'; // Variable para manejar el filtro
+  filtroSeleccionado: string = 'todas';
 
   constructor(private tareaService: TareaService) {
     this.tareas = this.tareaService.getTareas();
