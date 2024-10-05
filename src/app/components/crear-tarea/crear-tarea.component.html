@@ -1,0 +1,58 @@
+<div class="container mt-3">
+  <h2>Crear/Editar Tarea</h2>
+  <form [formGroup]="tareaForm" (ngSubmit)="guardarTarea()">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre de la Tarea:</label>
+      <input id="nombre" formControlName="nombre" class="form-control" />
+      <div *ngIf="tareaForm.get('nombre')?.invalid && (tareaForm.get('nombre')?.touched || tareaForm.get('nombre')?.dirty)" class="text-danger">
+        <small *ngIf="tareaForm.get('nombre')?.errors?.required">El nombre es obligatorio.</small>
+        <small *ngIf="tareaForm.get('nombre')?.errors?.minlength">El nombre debe tener al menos 5 caracteres.</small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="fechaLimite" class="form-label">Fecha Límite:</label>
+      <input type="date" id="fechaLimite" formControlName="fechaLimite" class="form-control" />
+      <div *ngIf="tareaForm.get('fechaLimite')?.invalid && (tareaForm.get('fechaLimite')?.touched || tareaForm.get('fechaLimite')?.dirty)" class="text-danger">
+        <small *ngIf="tareaForm.get('fechaLimite')?.errors?.required">La fecha es obligatoria.</small>
+      </div>
+    </div>
+
+    <div formArrayName="personas" class="mb-3">
+      <h6>Personas Asociadas:</h6>
+      <div *ngFor="let persona of personas.controls; let i = index" [formGroupName]="i">
+        <label for="persona{{i}}" class="me-2">Persona {{i + 1}}:</label>
+        <div class="d-flex">
+          <input id="persona{{i}}" formControlName="nombre" placeholder="Nombre" class="form-control me-2" />
+          <input type="number" formControlName="edad" placeholder="Edad" class="form-control me-2" />
+          <button (click)="eliminarPersona(i)" class="btn btn-danger btn-sm">Eliminar</button>
+        </div>
+        <div *ngIf="persona.get('edad')?.invalid && (persona.get('edad')?.touched || persona.get('edad')?.dirty)" class="text-danger me-2">
+          <small *ngIf="persona.get('edad')?.errors?.required">La edad es obligatoria.</small>
+          <small *ngIf="persona.get('edad')?.errors?.min">La edad debe ser al menos 18.</small>
+        </div>
+        <div *ngIf="persona.get('nombre')?.invalid && (persona.get('nombre')?.touched || persona.get('nombre')?.dirty)" class="text-danger me-2">
+          <small *ngIf="persona.get('nombre')?.errors?.required">El nombre es obligatorio.</small>
+          <small *ngIf="persona.get('nombre')?.errors?.minlength">El nombre debe tener al menos 5 caracteres.</small>
+        </div>
+        <div formArrayName="habilidades" class="mt-2">
+          <h6>Habilidades:</h6>
+          <div *ngFor="let habilidad of persona.get('habilidades').controls; let j = index" class="d-flex align-items-center mb-2">
+            <input [formControlName]="j" placeholder="Habilidad" class="form-control me-2" />
+            <button (click)="eliminarHabilidad(i, j)" class="btn btn-danger btn-sm">Eliminar Habilidad</button>
+          </div>
+          <button (click)="agregarHabilidad(i)" class="btn btn-secondary btn-sm">Agregar Habilidad</button>
+        </div>
+      </div>
+
+      <!-- Mensaje de error para nombres duplicados -->
+      <div *ngIf="personas.errors?.nombresDuplicados" class="text-danger mt-2">
+        <small>No puede haber personas con el mismo nombre.</small>
+      </div>
+
+      <button (click)="agregarPersona()" class="btn btn-secondary mt-2">Agregar Persona</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="tareaForm.invalid">Guardar Tarea</button>
+  </form>
+</div>

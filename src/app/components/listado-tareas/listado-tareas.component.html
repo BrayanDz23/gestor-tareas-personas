@@ -1,0 +1,45 @@
+<div class="container mt-3">
+  <h2>Listado de Tareas</h2>
+
+  <div class="btn-group mb-3">
+    <button [ngClass]="{'btn-primary': filtroSeleccionado === 'todas'}" 
+            (click)="filtrarTareas('todas')" 
+            class="btn btn-outline-primary">Todas</button>
+    <button [ngClass]="{'btn-primary': filtroSeleccionado === 'pendientes'}" 
+            (click)="filtrarTareas('pendientes')" 
+            class="btn btn-outline-primary">Pendientes</button>
+    <button [ngClass]="{'btn-primary': filtroSeleccionado === 'completadas'}" 
+            (click)="filtrarTareas('completadas')" 
+            class="btn btn-outline-primary">Completadas</button>
+  </div>
+
+  <ul class="list-group">
+    <li *ngFor="let tarea of tareas" class="list-group-item d-flex justify-content-between align-items-center" style="padding: 10px; display: flex; flex-direction: column; max-width: 600px; margin: auto;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <input type="checkbox" (change)="marcarComoCompletada(tarea.id)" [checked]="tarea.completada" />
+        <div class="flex-grow-1 mx-2">
+          <strong>{{ tarea.nombre }}</strong> - {{ tarea.fechaLimite }}
+        </div>
+        <div>
+          <button (click)="editarTarea(tarea)" class="btn btn-warning btn-sm">Editar</button>
+          <button (click)="eliminarTarea(tarea.id)" class="btn btn-danger btn-sm">Eliminar</button>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px; width: 100%;">
+        <strong style="text-align: left; display: block;">Personas Asociadas:</strong>
+        <ul>
+          <li *ngFor="let persona of tarea.personas" style="padding-bottom: 10px; border-bottom: 1px solid #ccc; margin-bottom: 10px;">
+            {{ persona.nombre }} ({{ persona.edad }})<br />
+            <strong>Habilidades:</strong>
+            <ul>
+              <li *ngFor="let habilidad of persona.habilidades">
+                {{ habilidad }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div>
